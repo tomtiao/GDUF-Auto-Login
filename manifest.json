@@ -1,0 +1,43 @@
+{
+    "name": "__MSG_extName__",
+    "description": "__MSG_extDesc__",
+    "version": "1.0",
+    "manifest_version": 2,
+    "default_locale": "zh",
+    "icons": {
+        "120": "key120x120.png"
+    },
+    "background": {
+        "scripts": [
+            "background.js"
+        ]
+    },
+    "permissions": [
+        "storage"
+    ],
+    "browser_action": {
+        "default_popup": "popup.html"
+    },
+    "options_ui": {
+        "page": "options.html",
+        "browser_style": true,
+        "chrome_style": true
+    },
+    "content_scripts": [
+        {
+            "matches": [
+                "http://10.69.69.72/portal.do*",
+                "http://10.69.69.72/portal/usertemp_computer/guangjin-pc-v*/logout.html*"
+            ],
+            "run_at": "document_idle",
+            "js": [
+                "content.js"
+            ]
+        }
+    ],
+    "applications": {
+        "gecko": {
+            "id": "gduf-auto-login@defuse.local"
+        }
+    }
+}

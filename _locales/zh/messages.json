@@ -1,0 +1,38 @@
+{
+    "extName": {
+        "message": "自动登陆GDUF校园网"
+    },
+    "extDesc": {
+        "message": "无需操作即可瞬间登录GDUF校园网！"
+    },
+    "extInvalidInputAlert": {
+        "message": "来自自动登录扩展：\n无效的账号或密码，请重新设置！"
+    },
+    "username": {
+        "message": "账号"
+    },
+    "password": {
+        "message": "密码"
+    },
+    "openSettings": {
+        "message": "打开设置"
+    },
+    "accountStatus": {
+        "message": "当前账号密码已设置为 $1 $2"
+    },
+    "optionsSaved": {
+        "message": "自动关闭标签页已$1"
+    },
+    "on": {
+        "message": "开启"
+    },
+    "off": {
+        "message": "关闭"
+    },
+    "save": {
+        "message": "保存"
+    },
+    "autoCloseMessage": {
+        "message": "登录成功后自动关闭标签页"
+    }
+}

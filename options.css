@@ -1,0 +1,19 @@
+#status {
+    display: flex;
+    height: 32px;
+    justify-content: center;
+    align-items: center;
+}
+
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    min-height: 150px;
+}
+
+.wrapper > label {
+    font-weight: bold;
+}

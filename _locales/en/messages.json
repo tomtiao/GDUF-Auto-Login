@@ -1,0 +1,40 @@
+{
+    "extName": {
+        "message": "GDUF Auto-Login",
+        "description": "Extension name."
+    },
+    "extDesc": {
+        "message": "Instantly Login GDUF network without a single click!",
+        "description": "Extension description."
+    },
+    "extInvalidInputAlert": {
+        "message": "From Extension: \nInvalid username or password, please check again!"
+    },
+    "username": {
+        "message": "Username"
+    },
+    "password": {
+        "message": "Password"
+    },
+    "openSettings": {
+        "message": "Open Settings"
+    },
+    "accountStatus": {
+        "message": "Current username and password set to $1 $2"
+    },
+    "optionsSaved": {
+        "message": "Automatically close the tab after login is $1"
+    },
+    "on": {
+        "message": "On"
+    },
+    "off": {
+        "message": "Off"
+    },
+    "save": {
+        "message": "Save"
+    },
+    "autoCloseMessage": {
+        "message": "Automatically close the tab after login"
+    }
+}
