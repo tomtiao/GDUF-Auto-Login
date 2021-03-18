@@ -14,7 +14,7 @@
 
   - [自动登陆GDUF校园网 - Microsoft Edge Addons](https://microsoftedge.microsoft.com/addons/detail/keaemmllkpjogndglcndjdihlbeaeede)
 
-- Mozilla Firefox
+- Mozilla Firefox 及其他基于 Chromium 的浏览器
 
   - [Releases · tomtiao/GDUF-Auto-Login](https://github.com/tomtiao/GDUF-Auto-Login/releases)
 
