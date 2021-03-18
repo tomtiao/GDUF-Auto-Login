@@ -5,7 +5,8 @@
     "manifest_version": 2,
     "default_locale": "zh",
     "icons": {
-        "120": "key120x120.png"
+        "120": "key120x120.png",
+        "160": "key160x160.png"
     },
     "background": {
         "scripts": [
