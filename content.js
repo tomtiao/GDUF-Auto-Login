@@ -29,9 +29,7 @@ const app = {
                             username_input.value = loginUsername;
                             password_input.value = loginPassword;
     
-                            const submit_btn = document.querySelector('button#loginsubmit');
-    
-                            submit_btn.click();
+                            window.checkSubmit(); // available in portalUtil.js, execute this will send the login request
     
                         } else {
                             alert(`${chrome.i18n.getMessage('extInvalidInputAlert')}
@@ -43,7 +41,12 @@ const app = {
             }
 
             if (document.readyState == 'loading') {
-                self.addEventListener('DOMContentLoaded', work);
+                document.head.addEventListener('load', e => {
+                    if (e.target.tagName === 'SCRIPT'
+                    && e.target.endsWith('portalUtil.js')) {
+                        work();
+                    }
+                });
             } else {
                 work();
             }
