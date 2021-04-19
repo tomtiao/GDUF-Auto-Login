@@ -4,7 +4,13 @@ const optionBtn = document.getElementById("optionBtn");
 
 chrome.storage.sync.get(['username', 'password'], ({ username, password }) => {
     username_text.textContent = `${chrome.i18n.getMessage('username')} ${username}`;
-    password_text.textContent = `${chrome.i18n.getMessage('password')} ${password}`;
+    chrome.storage.sync.get(['showPasswordOnPopUp'], ({ showPasswordOnPopUp }) => {
+        if (showPasswordOnPopUp) {
+            password_text.textContent = `${chrome.i18n.getMessage('password')} ${password}`;
+        } else {
+            password_text.textContent = ``;
+        }
+    });
 });
 
 optionBtn.textContent = chrome.i18n.getMessage('openSettings');

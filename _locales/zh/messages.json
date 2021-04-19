@@ -20,8 +20,11 @@
     "accountStatus": {
         "message": "当前账号密码已设置为 $1 $2"
     },
-    "optionsSaved": {
+    "autoCloseTab": {
         "message": "自动关闭标签页已$1"
+    },
+    "showPassword": {
+        "message": "在弹出菜单中显示密码已$1"
     },
     "on": {
         "message": "开启"
@@ -34,6 +37,9 @@
     },
     "autoCloseMessage": {
         "message": "登录成功后自动关闭标签页"
+    },
+    "showPasswordOnPopUp": {
+        "message": "在弹出菜单中显示密码"
     },
     "errorOnLogin": {
         "message": "错误：$1"

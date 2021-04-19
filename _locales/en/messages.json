@@ -22,8 +22,11 @@
     "accountStatus": {
         "message": "Current username and password set to $1 $2"
     },
-    "optionsSaved": {
+    "autoCloseTab": {
         "message": "Automatically close the tab after login is $1"
+    },
+    "showPassword": {
+        "message": "Show the password in the pop-up menu is $1"
     },
     "on": {
         "message": "On"
@@ -36,6 +39,9 @@
     },
     "autoCloseMessage": {
         "message": "Automatically close the tab after login"
+    },
+    "showPasswordOnPopUp": {
+        "message": "Show the password in the pop-up menu"
     },
     "errorOnLogin": {
         "message": "Error: $1"

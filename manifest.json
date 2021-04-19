@@ -1,7 +1,7 @@
 {
     "name": "__MSG_extName__",
     "description": "__MSG_extDesc__",
-    "version": "1.0.6",
+    "version": "1.1.0",
     "manifest_version": 2,
     "default_locale": "zh",
     "icons": {
@@ -38,7 +38,7 @@
     ],
     "applications": {
         "gecko": {
-            "id": "gduf-auto-login@defuse.local"
+            "id": "gduf-auto-login@nogothere.com"
         }
     }
 }
