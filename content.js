@@ -13,29 +13,60 @@ const app = {
         } else {
             // needs login
             work = function () {
-                let loginUsername;
-                let loginPassword;
+                let login_username;
+                let login_password;
 
                 chrome.storage.sync.get(['username', 'password'], ({ username, password }) => {
-                    loginUsername = username;
-                    loginPassword = password;
-                    
-                    const messages = {
-                        INVALID_INPUT: `${chrome.i18n.getMessage('extInvalidInputAlert')}
-                        ${loginUsername} ${loginPassword}`,
-                    };
+                    login_username = username;
+                    login_password = password;
 
-                    if (loginUsername && loginPassword) {
-                        const username_input = document.querySelector(`input[id='userid']`);
-                        const password_input = document.querySelector(`input[id='passwd']`);
+                    if (login_username && login_password) {
+                        const REQUEST_URL = new URL(`/quickauth.do`, window.location.origin);
+                        
+                        const pages_params = new URLSearchParams(window.location.search);
+                        const VERSION = 0,
+                              PORTALPAGEID = 1;
 
-                        username_input.value = loginUsername;
-                        password_input.value = loginPassword;
+                        const params = {
+                            userid: login_username,
+                            passwd: login_password,
+                            wlanuserip: pages_params.get('wlanuserip'),
+                            wlanacname: pages_params.get('wlanacname'),
+                            wlanacIp: '',
+                            ssid: '',
+                            vlan: pages_params.get('vlan'),
+                            mac: encodeURIComponent(pages_params.get('mac')),
+                            version: VERSION,
+                            portalpageid: PORTALPAGEID,
+                            timestamp: Date.now(),
+                            portaltype: ''
+                        };
 
-                        const login_btn = document.querySelector(`button[id='loginsubmit']`);
+                        const request_params = new URLSearchParams(params);
+                        
+                        const url = `${REQUEST_URL}?${request_params.toString()}`;
 
-                        login_btn.click(); // do this terrible thing for now
+                        fetch(url, { credentials: 'same-origin' })
+                            .then(res => res.json())
+                            .then((object) => {
+                                if (( +object.code ) === 0) {
+                                    chrome.runtime.sendMessage({ closeTab: true });
+                                } else {
+                                    const messages = {
+                                        ERROR:
+                                        `${chrome.i18n.getMessage('errorOnLogin', object.message)} ${chrome.i18n.getMessage('tryAgain')}`
+                                    };
+                                    if (confirm(messages.ERROR)) {
+                                        work();
+                                    }
+                                }
+                            });
                     } else {
+                        const messages = {
+                            INVALID_INPUT: `${chrome.i18n.getMessage('extInvalidInputAlert')}
+                            ${login_username} ${login_password}`,
+                        };
+
                         alert(messages.INVALID_INPUT);
                         chrome.runtime.openOptionsPage();
                     }

@@ -36,5 +36,11 @@
     },
     "autoCloseMessage": {
         "message": "Automatically close the tab after login"
+    },
+    "errorOnLogin": {
+        "message": "Error: $1"
+    },
+    "tryAgain": {
+        "message": "Try again?"
     }
 }

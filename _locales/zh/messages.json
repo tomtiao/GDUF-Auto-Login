@@ -34,5 +34,11 @@
     },
     "autoCloseMessage": {
         "message": "登录成功后自动关闭标签页"
+    },
+    "errorOnLogin": {
+        "message": "错误：$1"
+    },
+    "tryAgain": {
+        "message": "是否重试？"
     }
 }
