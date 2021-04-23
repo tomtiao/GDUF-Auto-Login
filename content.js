@@ -43,14 +43,18 @@ const app = {
                         };
 
                         const request_params = new URLSearchParams(params);
-                        
-                        const url = `${REQUEST_URL}?${request_params.toString()}`;
+
+                        const url = new URL(`?${request_params.toString()}`, REQUEST_URL);
 
                         fetch(url, { credentials: 'same-origin' })
                             .then(res => res.json())
                             .then((object) => {
                                 if (( +object.code ) === 0) {
-                                    chrome.runtime.sendMessage({ closeTab: true });
+                                    chrome.storage.sync.get(['autoClose'], ({ autoClose }) => {
+                                        if (autoClose) {
+                                            chrome.runtime.sendMessage({ closeTab: true });
+                                        }
+                                    });
                                 } else {
                                     const messages = {
                                         ERROR:
@@ -60,6 +64,10 @@ const app = {
                                         work();
                                     }
                                 }
+                            })
+                            .catch(reason => {
+                                alert(chrome.i18n.getMessage('errorOnRequest'), [ reason ]);
+                                console.error(`Encountered error when sending request: ${reason}`);
                             });
                     } else {
                         const messages = {
@@ -76,4 +84,10 @@ const app = {
         work();
     }
 };
-app.start();
+
+try {
+    app.start();
+} catch (error) {
+    alert(chrome.i18n.getMessage('errorFromExtension', [ error ]));
+    console.error(`Encountered error when trying to login: ${error}`);
+}
