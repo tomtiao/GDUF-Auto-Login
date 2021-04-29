@@ -1,6 +1,10 @@
+body {
+    padding: 1rem;
+}
+
 #status {
     display: flex;
-    height: 32px;
+    height: 2rem;
     justify-content: center;
     align-items: center;
 }
@@ -10,22 +14,28 @@
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 1rem;
+    margin-bottom: 2rem;
     min-height: 150px;
 }
 
 .wrapper > label {
+    font-size: 1.25rem;
     font-weight: bold;
 }
 
 @media (prefers-color-scheme: dark) {
-    body, input, button {
+    body {
         color: #e8e6e3;
         background-color: #181a1b;
     }
 
-    input,
-    button {
+    /* Override browser default style */
+    input[type="text"], input[type="password"], button#saveBtn {
+        color: #e8e6e3;
         border-color: #736b5e;
+        background-color: #181a1b;
+        background-image: none;
+        text-shadow: none;
+        box-shadow: none;
     }
 }
