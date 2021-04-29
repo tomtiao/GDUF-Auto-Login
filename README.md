@@ -22,6 +22,10 @@
 
   - N/A
 
+## 报告问题
+
+使用 GitHub [Issues](https://github.com/tomtiao/GDUF-Auto-Login/issues) 功能报告扩展相关的问题。
+
 ## 隐私声明
 
 扩展仅向校园网登录服务器发送用户填入扩展的账号和密码。
