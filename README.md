@@ -22,6 +22,8 @@
 
   - N/A
 
+    - 上架商店需要一定的费用，如果你希望扩展上架，请在这个 [Issue](https://github.com/tomtiao/GDUF-Auto-Login/issues/1) 下回复。
+
 ## 报告问题
 
 使用 GitHub [Issues](https://github.com/tomtiao/GDUF-Auto-Login/issues) 功能报告扩展相关的问题。
