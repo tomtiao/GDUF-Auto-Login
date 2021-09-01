@@ -7,8 +7,8 @@ let default_username = '123456789',
     loginPageNotice = '',
     logoutPageNotice = '';
 
-chrome.runtime.onInstalled.addListener(object => {
-    if (object.reason == 'install') {
+chrome.runtime.onInstalled.addListener(request => {
+    if (request.reason == 'install') {
         chrome.storage.sync.set({
             username: default_username,
             password: default_password,
@@ -30,8 +30,8 @@ chrome.runtime.onInstalled.addListener(object => {
 });
 
 // message from content.js, close the tab after login
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-    if (message.closeTab) {
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+    if (request.closeTab) {
         chrome.tabs.remove(sender.tab.id);
     }
 });
