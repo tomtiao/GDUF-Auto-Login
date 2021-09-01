@@ -36,7 +36,7 @@
         "message": "保存"
     },
     "logout": {
-        "messsage": "登出"
+        "message": "登出"
     },
     "autoCloseMessage": {
         "message": "登录成功后自动关闭标签页"

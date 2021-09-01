@@ -38,7 +38,7 @@
         "message": "Save"
     },
     "logout": {
-        "messsage": "Logout"
+        "message": "Logout"
     },
     "autoCloseMessage": {
         "message": "Automatically close the tab after login"
