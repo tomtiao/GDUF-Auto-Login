@@ -26,7 +26,7 @@
 
 ## 报告问题
 
-使用 GitHub [Issues](https://github.com/tomtiao/GDUF-Auto-Login/issues) 功能报告扩展相关的问题。
+使用 [Issues](https://github.com/tomtiao/GDUF-Auto-Login/issues) 功能报告扩展相关的问题。
 
 ## 隐私声明
 
