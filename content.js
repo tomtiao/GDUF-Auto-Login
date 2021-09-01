@@ -61,14 +61,12 @@ const app = {
     start: async () => {
         if (window.location.href.includes('logout.html')) { // logout page, logout.html
             // close the tab after logon if user had chosen to
-            (function () {
-                getNotice('logout');
-                chrome.storage.sync.get(['autoClose'], ({ autoClose }) => {
-                    if (autoClose) {
-                        chrome.runtime.sendMessage({ closeTab: true });
-                    }
-                });
-            })();
+            getNotice('logout');
+            chrome.storage.sync.get(['autoClose'], ({ autoClose }) => {
+                if (autoClose) {
+                    chrome.runtime.sendMessage({ closeTab: true });
+                }
+            });
         } else if (window.location.href.includes('portal.do')) {
             // login page, /portal.do*
             getNotice('login');
