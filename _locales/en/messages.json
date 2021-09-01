@@ -37,11 +37,23 @@
     "save": {
         "message": "Save"
     },
+    "logout": {
+        "messsage": "Logout"
+    },
     "autoCloseMessage": {
         "message": "Automatically close the tab after login"
     },
     "showPasswordOnPopUp": {
         "message": "Show the password in the pop-up menu"
+    },
+    "notice": {
+        "message": "GDUF notice"
+    },
+    "loginNoticeTitle": {
+        "message": "Login page notice"
+    },
+    "logoutNoticeTitle": {
+        "message": "Logout page notice"
     },
     "errorOnLogin": {
         "message": "Error: $1"

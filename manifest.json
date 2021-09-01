@@ -1,7 +1,7 @@
 {
     "name": "__MSG_extName__",
     "description": "__MSG_extDesc__",
-    "version": "1.1.4",
+    "version": "1.1.5",
     "manifest_version": 2,
     "default_locale": "zh",
     "icons": {
@@ -28,7 +28,7 @@
         {
             "matches": [
                 "http://10.69.69.72/portal.do*",
-                "http://10.69.69.72/portalLogout.do*"
+                "http://10.69.69.72/portal/usertemp_computer/guangjin-pc-v*/logout.html*"
             ],
             "run_at": "document_idle",
             "js": [

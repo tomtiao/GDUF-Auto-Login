@@ -35,11 +35,23 @@
     "save": {
         "message": "保存"
     },
+    "logout": {
+        "messsage": "登出"
+    },
     "autoCloseMessage": {
         "message": "登录成功后自动关闭标签页"
     },
     "showPasswordOnPopUp": {
         "message": "在弹出菜单中显示密码"
+    },
+    "notice": {
+        "message": "校园网公告"
+    },
+    "loginNoticeTitle": {
+        "message": "登录页面公告"
+    },
+    "logoutNoticeTitle": {
+        "message": "登出页面公告"
     },
     "errorOnLogin": {
         "message": "错误：$1"

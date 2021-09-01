@@ -1,3 +1,5 @@
+'use strict';
+
 function handleUserInput() {
     const username_input = document.querySelector(`input[id='username']`);
     const password_input = document.querySelector(`input[id='password']`);
