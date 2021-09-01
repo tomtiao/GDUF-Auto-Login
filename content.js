@@ -69,7 +69,7 @@ const app = {
                     }
                 });
             })();
-        } else {
+        } else if (window.location.href.includes('portal.do')) {
             // login page, /portal.do*
             getNotice('login');
             chrome.storage.sync.get(['username', 'password'], async function work({ username, password }) {
@@ -105,6 +105,10 @@ const app = {
                     chrome.runtime.openOptionsPage();
                 }
             });
+        } else {
+            // user manually goes to the logout page, portalLogout.do*.
+            // do nothing but save the notice
+            getNotice('logout');
         }
     }
 };
