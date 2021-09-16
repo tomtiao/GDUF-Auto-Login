@@ -47,6 +47,9 @@
     "notice": {
         "message": "校园网公告"
     },
+    "noNotice": {
+        "message": "暂无公告"
+    },
     "loginNoticeTitle": {
         "message": "登录页面公告"
     },

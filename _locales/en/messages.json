@@ -49,6 +49,9 @@
     "notice": {
         "message": "GDUF notice"
     },
+    "noNotice": {
+        "message": "No notice"
+    },
     "loginNoticeTitle": {
         "message": "Login page notice"
     },

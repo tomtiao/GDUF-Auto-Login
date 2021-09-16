@@ -12,8 +12,14 @@ function main() {
         const loginNoticeContent = document.getElementById('notice-login-content');
         const logoutNoticeContent = document.getElementById('notice-logout-content');
         
-        loginNoticeContent.textContent = loginPageNotice;
-        logoutNoticeContent.textContent = logoutPageNotice;
+        loginNoticeContent.textContent = 
+            loginPageNotice == '' ? 
+            chrome.i18n.getMessage('noNotice') :
+            loginPageNotice;
+        logoutNoticeContent.textContent =
+            logoutPageNotice == '' ? 
+            chrome.i18n.getMessage('noNotice') :
+            logoutPageNotice;
     });
 }
 

@@ -4,7 +4,7 @@
  * Send login request
  * @param {string} username 
  * @param {string} password 
- * @returns {Promise<boolean>} return true if the request is success, false otherwise.
+ * @returns {Promise<{ code: string; message: string } & Record<string, string>>} the response object
  */
 async function sendLoginRequest(username, password) {
     const REQUEST_URL = new URL(`/quickauth.do`, window.location.origin);
@@ -86,20 +86,16 @@ const app = {
                             }
                         });
                     } else {
-                        const messages = {
-                            ERROR:
-                                `${chrome.i18n.getMessage('errorOnLogin', object.message)} ${chrome.i18n.getMessage('tryAgain')}`
-                        };
-                        if (confirm(messages.ERROR)) {
+                        const ERROR = chrome.i18n.getMessage('errorOnLogin', object.message);
+                        if (confirm(`${ERROR} ${chrome.i18n.getMessage('tryAgain')}`)) {
                             work();
                         }
                     }
                 } else {
-                    const messages = {
-                        INVALID_INPUT: `${chrome.i18n.getMessage('extInvalidInputAlert')}
-                        ${username} ${password}`,
-                    };
-                    alert(messages.INVALID_INPUT);
+                    const INVALID_INPUT_ALERT =
+                    `${chrome.i18n.getMessage('extInvalidInputAlert')} 
+                    ${username} ${password}`;
+                    alert(INVALID_INPUT_ALERT);
                     chrome.runtime.openOptionsPage();
                 }
             });
