@@ -46,13 +46,13 @@ function getNotice(type) {
         const loginPageNotice = document.querySelector('div[class="modal-body"] > div[class="title"]');
 
         chrome.storage.sync.set({
-            loginPageNotice: loginPageNotice.textContent.trim()
+            loginPageNotice: loginPageNotice.textContent.trim().replace(/\s+/g, '\<br\>')
         });
     } else {
         const logoutPageNotice = document.getElementById('model_notice');
         
         chrome.storage.sync.set({
-            logoutPageNotice: logoutPageNotice.textContent.trim()
+            logoutPageNotice: logoutPageNotice.textContent.trim().replace(/\s+/g, '\<br\>')
         });
     }
 }

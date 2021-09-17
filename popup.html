@@ -3,17 +3,38 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Popup</title>
     <link rel="stylesheet" href="popup.css">
     <script src="popup.js" defer></script>
   </head>
   <body>
-    <div class="info">
-      <p class="username"></p>
-      <p class="password"></p>
-    </div>
-    <a href="notice.html" class="notice-link"></a>
-    <div class="buttons">
-      <button id="optionBtn"></button>
+    <template id="account-panel">
+      <div class="info">
+        <p class="username"></p>
+        <p class="password"></p>
+      </div>
+    </template>
+    <template id="notice-panel">
+      <div class="notice">
+        <details>
+            <summary id="notice-login-title"></summary>
+            <section id="notice-login-content"></section>
+        </details>
+        <details>
+            <summary id="notice-logout-title"></summary>
+            <section id="notice-logout-content"></section>
+        </details>
+      </div>
+    </template>
+    <div class="container">
+      <ul class="types">
+        <li class="type"><a class="current" href="#" data-type="account">账号</a></li>
+        <li class="type"><a href="#" data-type="notice">公告</a></li>
+      </ul>
+      <div class="wrapper"></div>
+      <div class="buttons">
+        <button id="optionBtn"></button>
+      </div>
     </div>
   </body>
 </html>

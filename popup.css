@@ -1,5 +1,74 @@
+:root {
+    font-size: 16px;
+}
+
 body {
-    min-width: 150px;
+    width: -moz-max-content;
+    width: -webkit-max-content;
+    width: max-content;
+    max-width: 240px;
+
+    font-size: 1em;
+    background-color: #eee;
+}
+
+.wrapper {
+    margin: 0.5em 0;
+    padding: 0 0.5em;
+    max-height: 400px;
+    background-color: #fff;
+    overflow-y: auto;
+    border-radius: 4px;
+    box-shadow: 0 0 5px 0px rgba(0, 0, 0, 0.1);
+}
+
+a, a:visited {
+    display: block;
+    color: #333;
+    padding: 0.25em;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: background-color 150ms ease-in-out;
+}
+
+a.current {
+    color: #005e89;
+    text-decoration: underline;
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+a:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+button {
+    border: 0;
+    margin: 0.5em 0;
+    padding: 0.5em;
+    border-radius: 4px;
+    background-color: #fff;
+    box-shadow: 0 0 5px 0px rgba(0, 0, 0, 0.1);
+    transition: background-color 120ms ease-in-out;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.info p {
+    margin: 0.5em 0;
+}
+
+.types {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+.types .type {
+    display: inline-block;
+    margin-right: 1em;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -8,7 +77,36 @@ body {
         background-color: #181a1b;
     }
 
-    button {
-        border-color: #736b5e;
+    a, a:visited {
+        color: #a5a5a5;
+        text-decoration: none;
     }
+
+    a.current {
+        color: #35abff;
+        background-color: rgba(255, 255, 255, 0.1);
+        text-decoration: underline;
+    }
+
+    .wrapper {
+        background-color: rgba(255,255,255,0.1);
+    }
+    
+    button {
+        background-color: rgba(255,255,255,0.2);
+    }
+
+    button:hover {
+        background-color: rgba(255,255,255,0.3);
+    }
+}
+
+.notice details {
+    margin: 0.5em 0;
+}
+
+.notice section {
+    line-height: 1.6;
+    padding: 0.5em 0;
+    font-size: 0.75em;
 }
