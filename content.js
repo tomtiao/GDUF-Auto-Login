@@ -70,7 +70,7 @@ const app = {
         } else if (window.location.href.includes('portal.do')) {
             // login page, /portal.do*
             getNotice('login');
-            chrome.storage.sync.get(['username', 'password'], async function work({ username, password }) {
+            chrome.storage.sync.get(['username', 'password'], function work({ username, password }) {
                 if (username && password) {
                     let object;
                     try {
@@ -88,7 +88,7 @@ const app = {
                     } else {
                         const ERROR = chrome.i18n.getMessage('errorOnLogin', object.message);
                         if (confirm(`${ERROR} ${chrome.i18n.getMessage('tryAgain')}`)) {
-                            work();
+                            work({ username, password });
                         }
                     }
                 } else {
