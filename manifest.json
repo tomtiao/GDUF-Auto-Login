@@ -1,12 +1,11 @@
 {
     "name": "__MSG_extName__",
     "description": "__MSG_extDesc__",
-    "version": "1.2.3",
+    "version": "1.2.4",
     "manifest_version": 2,
     "default_locale": "zh",
     "icons": {
-        "120": "key120x120.png",
-        "160": "key160x160.png"
+        "500": "icon500x500.png"
     },
     "background": {
         "scripts": [
