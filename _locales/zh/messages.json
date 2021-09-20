@@ -8,11 +8,29 @@
     "extInvalidInputAlert": {
         "message": "来自自动登录扩展：\n无效的账号或密码，请重新设置！"
     },
+    "description": {
+        "message": "某天，我受够了花 3 秒钟时间登录校园网，于是写了这个扩展。后来我发现，制作这个扩展用了无数个 3 秒。"
+    },
+    "docs": {
+        "message": "文档"
+    },
+    "repo": {
+        "message": "项目仓库"
+    },
+    "reportIssue": {
+        "message": "报告问题"
+    },
     "username": {
         "message": "账号"
     },
     "password": {
         "message": "密码"
+    },
+    "about": {
+        "message": "关于"
+    },
+    "settings": {
+        "message": "设置"
     },
     "openSettings": {
         "message": "打开设置"
@@ -37,6 +55,12 @@
     },
     "logout": {
         "message": "登出"
+    },
+    "accountTitle": {
+        "message": "账号"
+    },
+    "optionsTitle": {
+        "message": "杂项"
     },
     "autoCloseMessage": {
         "message": "登录成功后自动关闭标签页"

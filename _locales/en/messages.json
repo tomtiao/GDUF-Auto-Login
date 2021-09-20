@@ -10,11 +10,29 @@
     "extInvalidInputAlert": {
         "message": "From Extension: \nInvalid username or password, please check again!"
     },
+    "description": {
+        "message": "Finally, I got tired of spending three seconds every time I login the campus network. Then I realize it took me hundreds of three seconds to make this extension. "
+    },
+    "docs": {
+        "message": "Documentation"
+    },
+    "repo": {
+        "message": "Project repository"
+    },
+    "reportIssue": {
+        "message": "Report a bug"
+    },
     "username": {
         "message": "Username"
     },
     "password": {
         "message": "Password"
+    },
+    "about": {
+        "message": "关于"
+    },
+    "settings": {
+        "message": "设置"
     },
     "openSettings": {
         "message": "Open Settings"
@@ -39,6 +57,12 @@
     },
     "logout": {
         "message": "Logout"
+    },
+    "accountTitle": {
+        "message": "Account"
+    },
+    "optionsTitle": {
+        "message": "Miscellaneous"
     },
     "autoCloseMessage": {
         "message": "Automatically close the tab after login"

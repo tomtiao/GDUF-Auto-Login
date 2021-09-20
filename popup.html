@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Popup</title>
     <link rel="stylesheet" href="popup.css">
-    <script src="popup.js" defer></script>
+    <script type="module" src="popup.js" defer></script>
   </head>
   <body>
     <template id="account-panel">
@@ -17,24 +17,22 @@
     <template id="notice-panel">
       <div class="notice">
         <details>
-            <summary id="notice-login-title"></summary>
-            <section id="notice-login-content"></section>
+            <summary id="notice-login-title" data-message="loginNoticeTitle"></summary>
+            <section id="notice-login-content" data-name="loginPageNotice"></section>
         </details>
         <details>
-            <summary id="notice-logout-title"></summary>
-            <section id="notice-logout-content"></section>
+            <summary id="notice-logout-title" data-message="logoutNoticeTitle"></summary>
+            <section id="notice-logout-content" data-name="logoutPageNotice"></section>
         </details>
       </div>
     </template>
-    <div class="container">
-      <ul class="types">
-        <li class="type"><a class="current" href="#" data-type="account">账号</a></li>
-        <li class="type"><a href="#" data-type="notice">公告</a></li>
-      </ul>
-      <div class="wrapper"></div>
-      <div class="buttons">
-        <button id="optionBtn"></button>
-      </div>
+    <ul class="types">
+      <li class="type"><a class="current" href="#" data-type="account" data-message="accountTitle" draggable="false"></a></li>
+      <li class="type"><a href="#" data-type="notice" data-message="notice" draggable="false"></a></li>
+    </ul>
+    <div class="wrapper"></div>
+    <div class="buttons">
+      <button id="optionBtn"></button>
     </div>
   </body>
 </html>

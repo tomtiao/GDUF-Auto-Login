@@ -1,41 +1,297 @@
+:root {
+    font-size: 16px;
+}
+
 body {
-    padding: 1rem;
+    padding: 0 0.5em;
+    max-width: 400px;
+    overflow-y: auto;
+    background-color: #eee;
 }
 
 #status {
+    z-index: 1;
+    position: absolute;
     display: flex;
-    height: 2rem;
     justify-content: center;
     align-items: center;
+
+    padding: 1em;
+    height: 2em;
+    width: -moz-max-content;
+    width: -webkit-max-content;
+    width: max-content;
+    max-width: 340px;
+    border-radius: 4px;
+    background-color: #fff;
+    box-shadow: 0 0 3px 0 rgb(0, 0, 0, 0.5);
+    font-size: 14px;
+
+    opacity: 1;
+    transform: scaleX(1);
+    transform-origin: left;
+    transition-property: opacity, transform;
+    transition-timing-function: ease-in-out;
+    transition-duration: 150ms;
 }
 
-.wrapper {
+#status.hide {
+    pointer-events: none;
+    opacity: 0;
+    transform: scaleX(0);
+}
+
+.page-title {
+    margin: 0.5em 0;
+    font-size: 24px;
+    font-weight: 900;
+}
+
+.section {
+    border: 0;
+    padding: 0;
+    margin: 0.5em 0;
+}
+
+.section-title {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.option input[type=text], .option input[type=password] {
+    box-sizing: border-box;
+    padding: 0.5em 0.75em;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: 0 1px 0px 0px #eee;
+    outline: none;
+    transition: border-color, background-color 150ms ease-in-out;
+}
+
+.option input[type=text]:focus, .option input[type=password]:focus {
+    border-color: #03a9f4;
+}
+
+#saveBtn {
+    color: white;
+    border: unset;
+    margin: 0.5em 0;
+    padding: 0.5em 1em;
+    background: unset;
+    background-color: #005FB8;
+    border-radius: 4px;
+    box-shadow: unset;
+    text-shadow: unset;
+    font-size: 14px;
+}
+#saveBtn:hover {
+    background-color: #1a6ba8;
+}
+
+.option input[type=checkbox]:checked + .switch-like {
+    border-color: #1976d2;
+    background-color: #1976d2;
+}
+
+.option input[type=checkbox]:checked + .switch-like::before {
+    left: calc(100% - 0.5em);
+    background-color: #fff;
+}
+
+.option .switch-like::before {
+    display: block;
+    content: "";
+    position: relative;
+    left: 0;
+    background-color: #666;
+    width: 0.5em;
+    height: 0.5em;
+    border-radius: 100%;
+    font-size: 16px;
+    transition: left 150ms cubic-bezier(0, 0.75, 0.5, 1);
+}
+
+.option .switch-like {
+    display: block;
     display: flex;
-    flex-direction: column;
+    height: 1.25em;
+    width: 2.75em;
+    border: 1px solid #999;
+    border-radius: 1em;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0 0.25em;
+    box-sizing: border-box;
+    transition: background-color 150ms ease-in-out;
+}
+
+.option .visually-hidden {
+    opacity: 0;
+    user-select: none;
+    transform: scale(0);
+}
+
+.option {
+    position: relative;
+    display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 2rem;
-    min-height: 150px;
+    margin: 0.5em 0;
+    padding: 1em 1em;
+    background-color: white;
+    border-radius: 4px;
+    box-shadow: 0 0 2px 0 #ccc;
+    font-size: 14px;
+    user-select: none;
 }
 
-.wrapper > label {
-    font-size: 1.25rem;
+.option.switch .note {
+    position: absolute;
+    left: 1em;
+}
+
+.types {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+.types .type {
+    display: inline-block;
+    margin-right: 1em;
+}
+
+a, a:visited {
+    font-size: 16px;
+    display: block;
+    color: #333;
+    padding: 0.25em;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: background-color 150ms ease-in-out;
+}
+
+a.current {
+    color: #005e89;
+    text-decoration: underline;
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+a:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.about {
+    display: flex;
+}
+.about[hidden] {
+    display: none;
+}
+.about .icon {
+    display: inline-block;
+    width: 100px;
+    height: 100%;
+}
+.about .links {
+    list-style-type: none;
+    margin: 0.5em 0;
+    padding: 0;
+}
+.about .description {
+    display: inline-block;
+    color: #424242;
+    font-size: 14px;
+    transition: none;
+    margin: 0;
+}
+.about .content {
+    margin-left: 0.5em;
+}
+
+.about .link {
+    display: inline-block;
+    color: #005e89;
+    font-size: 14px;
     font-weight: bold;
 }
 
 @media (prefers-color-scheme: dark) {
     body {
-        color: #e8e6e3;
-        background-color: #181a1b;
+        color: #fff;
+        background-color: #202020;
     }
 
-    /* Override browser default style */
-    input[type="text"], input[type="password"], button#saveBtn {
+    .option input[type="text"], .option input[type="password"] {
         color: #e8e6e3;
-        border-color: #736b5e;
-        background-color: #181a1b;
+        border: unset;
+        border-bottom: 1px solid transparent;
+        background-color: #424242;
         background-image: none;
         text-shadow: none;
-        box-shadow: none;
+        box-shadow: 0 0 2px 0 rgba(255, 255, 255, 0.15);
+    }
+
+    .option input[type=text]:focus, .option input[type=password]:focus {
+        border-color: #03a9f4;
+        background-color: #212121;
+    }
+
+    #status {
+        background-color: #2c2c2c;
+    }
+
+    #saveBtn {
+        color: black;
+        background-color: #60cdff;
+    }
+
+    #saveBtn:hover {
+        background-color: #6eaad9;
+        box-shadow: 0 0 2px 0 rgba(255, 255, 255, 0.2);
+    }
+
+    .option {
+        background-color: #2b2b2b;
+        box-shadow: 0 0 2px 0 #1d1d1d;
+    }
+
+    .option .switch-like {
+        background-color: #343434;
+    }
+
+    .option .switch-like::before {
+        background-color: #d1d1d1;
+    }
+
+    .option input[type=checkbox]:checked + .switch-like::before {
+        background-color: #000000;
+    }
+
+    .option input[type=checkbox]:checked + .switch-like {
+        background-color: #6eaad9;
+        border-color: #6eaad9;
+    }
+
+    a, a:visited {
+        color: #a5a5a5;
+        text-decoration: none;
+    }
+
+    a.current {
+        color: #35abff;
+        background-color: rgba(255, 255, 255, 0.1);
+        text-decoration: underline;
+    }
+
+    a:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .about .description {
+        color: #ccc;
+    }
+
+    .about .link {
+        color: #6eaad9;
     }
 }

@@ -4,31 +4,61 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Options</title>
     <link rel="stylesheet" href="options.css">
+    <script type="module" src="options.js" defer></script>
 </head>
 
 <body>
-    <div id="status"></div>
-    <form>
-        <div class="wrapper">
-            <label for="username"></label>
-            <input type="text" name="username" id="username">
-            <label for="password"></label>
-            <input type="password" name="password" id="password">
-            <button id="saveBtn"></button>
+    <template id="settings-template">
+        <form>
+            <fieldset class="section account" name="account">
+                <legend class="section-title account-title" data-message="accountTitle"></legend>
+    
+                <div class="option input">
+                    <label for="username" data-message="username"></label>
+                    <input type="text" name="username" id="username">
+                </div>
+                <div class="option input">
+                    <label for="password" data-message="password"></label>
+                    <input type="password" name="password" id="password">
+                </div>
+                <button id="saveBtn" data-message="save"></button>
+            </fieldset>
+            <fieldset class="section options" name="options">
+                <legend class="section-title options-title" data-message="optionsTitle"></legend>
+    
+                <div id="checkboxSection" class="option switch">
+                    <input type="checkbox" name="autoClose" id="autoClose" class="visually-hidden">
+                    <label class="switch-like" for="autoClose" data-message="autoCloseMessage"></label>
+                </div>
+                <div id="showPasswordSection" class="option switch">
+                    <input type="checkbox" name="showPasswordOnPopUp" id="showPasswordOnPopUp" class="visually-hidden">
+                    <label class="switch-like" for="showPasswordOnPopUp" data-message="showPasswordOnPopUp"></label>
+                </div>
+            </fieldset>
+        </form>
+    </template>
+    <template id="about-template">
+        <div class="about container">
+            <img class="icon" src="key160x160.png" alt="Extension Icon">
+            <div class="content">
+                <p class="description" data-message="description"></p>
+                <ul class="links">
+                    <li class="link-item"><a href="https://github.com/tomtiao/GDUF-Auto-Login/blob/master/README.md" class="link" data-message="docs" target="_blank"></a></li>
+                    <li class="link-item"><a href="https://github.com/tomtiao/GDUF-Auto-Login" class="link" data-message="repo" target="_blank"></a></li>
+                    <li class="link-item"><a href="https://github.com/tomtiao/GDUF-Auto-Login/issues/new" class="link" data-message="reportIssue" target="_blank"></a></li>
+                </ul>
+            </div>
         </div>
-    </form>
-    <div class="options">
-        <div id="checkboxSection">
-            <input type="checkbox" name="autoClose" id="autoClose">
-            <label for="autoClose"></label>
-        </div>
-        <div id="showPasswordSection">
-            <input type="checkbox" name="showPasswordOnPopUp" id="showPasswordOnPopUp">
-            <label for="showPasswordOnPopUp"></label>
-        </div>
-    </div>
+    </template>
+    <div id="status" class="hide"></div>
+    <ul class="types">
+        <li class="type"><a class="current" href="#" data-type="settings" data-message="settings" draggable="false">设置</a></li>
+        <li class="type"><a href="#" data-type="about" data-message="about" draggable="false">关于</a></li>
+    </ul>
+    <h1 class="page-title"></h1>
+    <div class="wrapper"></div>
 </body>
-<script src="options.js"></script>
 
 </html>

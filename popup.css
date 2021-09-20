@@ -58,6 +58,7 @@ button:hover {
 
 .info p {
     margin: 0.5em 0;
+    overflow-wrap: break-word;
 }
 
 .types {
