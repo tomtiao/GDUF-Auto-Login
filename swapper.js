@@ -1,6 +1,6 @@
-export default class Swapper {
+class Swapper {
 
-    static EVENT_TYPE = 'swap';
+    // static EVENT_TYPE = 'swap';
 
     constructor(/** @type {string} */ selectorOfList) {
         const list = document.querySelector(selectorOfList);
@@ -33,3 +33,7 @@ export default class Swapper {
     }
 
 }
+
+Swapper.EVENT_TYPE = 'swap';
+
+export default Swapper;
