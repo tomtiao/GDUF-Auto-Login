@@ -61,17 +61,25 @@ class NoticePanel extends Component {
         titles.forEach(title =>
             title.textContent = chrome.i18n.getMessage(title.dataset.message)
         );
-
         const contents = this.template.content.querySelectorAll('section[data-name]');
         return getValue(Array.from(contents).map(content => content.dataset.name))
-                .then(keyValue =>
-                    contents.forEach(content =>
-                        content.innerHTML =
-                            keyValue[content.dataset.name] ?
-                            keyValue[content.dataset.name] :
-                            chrome.i18n.getMessage('noNotice')
-                    )
-                );
+                .then((/** @type {Record<string, string>} */ keyValue) => {
+                    const wrapText =
+                        (span, s) => span.append(document.createTextNode(s),
+                            document.createElement('br'));
+                    const setContent = (content, data) => {
+                        if (data[content.dataset.name]) {
+                            const span = document.createElement('span');
+                            
+                            data[content.dataset.name].split('\n').forEach((s) => wrapText(span, s));
+
+                            content.append(span);
+                        } else {
+                            content.textContent = chrome.i18n.getMessage('noNotice');
+                        }
+                    };
+                    contents.forEach(content => setContent(content, keyValue));
+                });
     }
 
 }
