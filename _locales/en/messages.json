@@ -29,10 +29,10 @@
         "message": "Password"
     },
     "about": {
-        "message": "关于"
+        "message": "About"
     },
     "settings": {
-        "message": "设置"
+        "message": "Settings"
     },
     "openSettings": {
         "message": "Open Settings"
