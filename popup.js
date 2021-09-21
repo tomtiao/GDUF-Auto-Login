@@ -18,24 +18,19 @@ class AccountPanel extends Component {
     }
 
     async init() {
-        return new Promise((resolve, reject) => {
-            chrome.storage.sync.get(['username', 'showPasswordOnPopUp'], ({ username, showPasswordOnPopUp: showPwd }) => {
-                if (username == null) reject(new TypeError(`username is ${username}`));
+        let { username, showPasswordOnPopUp: showPwd } = await getValue(['username', 'showPasswordOnPopUp']);
 
-                const usernameText = this.template.content.querySelector('.username');
-                usernameText.textContent = `${chrome.i18n.getMessage('username')} ${username}`;
-                
-                if (showPwd) {
-                    const passwordText = this.template.content.querySelector('.password');
-                    chrome.storage.sync.get(['password'], ({ password }) => {
-                        passwordText.textContent = `${chrome.i18n.getMessage('password')} ${password}`;
-                        resolve();
-                    });
-                } else {
-                    resolve();
-                }
-            });
-        });
+        if (username == null) throw new TypeError(`username is ${username}`);
+
+        const usernameText = this.template.content.querySelector('.username');
+        usernameText.textContent = `${chrome.i18n.getMessage('username')} ${username}`;
+        
+        if (showPwd) {
+            const passwordText = this.template.content.querySelector('.password');
+
+            let { password } = await getValue(['password']);
+            passwordText.textContent = `${chrome.i18n.getMessage('password')} ${password}`;
+        }
     }
 
 }
@@ -61,25 +56,26 @@ class NoticePanel extends Component {
         titles.forEach(title =>
             title.textContent = chrome.i18n.getMessage(title.dataset.message)
         );
-        const contents = this.template.content.querySelectorAll('section[data-name]');
-        return getValue(Array.from(contents).map(content => content.dataset.name))
-                .then((/** @type {Record<string, string>} */ keyValue) => {
-                    const wrapText =
-                        (span, s) => span.append(document.createTextNode(s),
-                            document.createElement('br'));
-                    const setContent = (content, data) => {
-                        if (data[content.dataset.name]) {
-                            const span = document.createElement('span');
-                            
-                            data[content.dataset.name].split('\n').forEach((s) => wrapText(span, s));
 
-                            content.append(span);
-                        } else {
-                            content.textContent = chrome.i18n.getMessage('noNotice');
-                        }
-                    };
-                    contents.forEach(content => setContent(content, keyValue));
-                });
+        const contents = this.template.content.querySelectorAll('section[data-name]');
+
+        let keyValue = await getValue(Array.from(contents).map(content => content.dataset.name));
+
+        const wrapText = (span, s) => span.append(document.createTextNode(s),
+                        document.createElement('br'));
+        const setContent = (content, data) => {
+            if (data[content.dataset.name]) {
+                const span = document.createElement('span');
+                
+                data[content.dataset.name].split('\n').forEach((s) => wrapText(span, s));
+
+                content.append(span);
+            } else {
+                content.textContent = chrome.i18n.getMessage('noNotice');
+            }
+        };
+        // set notice content
+        contents.forEach(content => setContent(content, keyValue));
     }
 
 }
