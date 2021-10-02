@@ -11,11 +11,6 @@ export default class Component {
     }
 
     /**
-     * initialize self asynchronously.
-     */
-    async init() { throw new Error('not implemented') }
-
-    /**
      * append content to dest asynchronously.
      * @param {HTMLElement} dest destination
      */
