@@ -7,28 +7,35 @@ export default class Component {
         if (!(template instanceof HTMLTemplateElement)) throw new TypeError(`expect <template>, got ${template}.`);
         
         /** @type {HTMLTemplateElement} */ this.template = template;
-        /** @type {HTMLElement} */ this.instance = null;
+        /** @type {HTMLElement | null} */ this.instance = null;
     }
 
     /**
-     * append content to dest asynchronously.
-     * @param {HTMLElement} dest destination
+     * initialize the component
      */
-    async render(dest) {
+    async init() {}
+
+    /**
+     * append content to dest asynchronously.
+     * @param {Element} dest destination
+     * @param {string} selectorOfInstance
+     */
+    async render(dest, selectorOfInstance) {
         await this.init();
         // transfering the template content rather than
         // copying it to preserve eventlisteners.
-        dest.append(document.adoptNode(this.template.content, true));
+        dest.append(document.adoptNode(this.template.content));
+        this.instance = dest.querySelector(selectorOfInstance);
     }
 
     /**
      * visually show self asynchronously.
      */
-    async show() { this.instance.hidden = false; }
+    async show() { if (this.instance) this.instance.hidden = false; }
 
     /**
      * visually hide self asynchronously.
      */
-    async hide() { this.instance.hidden = true; }
+    async hide() { if (this.instance) this.instance.hidden = true; }
 
 }

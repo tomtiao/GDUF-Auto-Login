@@ -2,7 +2,10 @@ import Component from './component.js';
 import Swapper from './swapper.js';
 import { getValue } from './util.js';
 
-const debounce = (f, timeout) => {
+const debounce = (/** @type {TimerHandler} */ f, /** @type {number | undefined} */ timeout) => {
+    /**
+     * @type {number | undefined}
+     */
     let id;
     return () => {
         clearTimeout(id);
@@ -16,20 +19,12 @@ class Settings extends Component {
         super(selectorOfTemplate);
     }
 
-    /**
-     * append content to dest asynchronously.
-     * @param {HTMLElement} dest destination
-     */
-     async render(dest) {
-        await super.render(dest);
-        this.instance = dest.querySelector('form');
-    }
-
     async init() {
         const form = this.template.content.querySelector('form');
+        if (!form) throw new TypeError('unable to find form');
 
         // set section title
-        const /** @type {HTMLLegendElement[]} */ legends = form.querySelectorAll('legend');
+        const legends = form.querySelectorAll('legend');
         legends.forEach(legend => 
             legend.textContent =
                 legend.dataset.message ?
@@ -38,7 +33,7 @@ class Settings extends Component {
         );
         
         // set controls string
-        const /** @type {HTMLLabelElement[]} */ labels = form.querySelectorAll('label');
+        const labels = form.querySelectorAll('label');
         labels.forEach(label => {
             const span = document.createElement('span');
             span.classList.add('note');
@@ -48,15 +43,15 @@ class Settings extends Component {
             label.append(span);
         });
 
-        const /** @type {HTMLButtonElement[]} */ buttons = form.querySelectorAll('button');
+        const buttons = form.querySelectorAll('button');
         buttons.forEach(button => button.textContent =
             button.dataset.message ? chrome.i18n.getMessage(button.dataset.message) : '');
 
-        const /** @type {HTMLInputElement[]} */ inputs = Array.from(form.querySelectorAll('input'));
+        const inputs = Array.from(form.querySelectorAll('input'));
 
         // set controls value
         const setValueAsync = getValue(inputs.map(input => input.name))
-            .then(object =>
+            .then((/** @type {Record<string, unknown>} */ object) =>
                 Object.entries(object)
                     .forEach(([k, v]) => {
                         const /** @type {HTMLInputElement} */ control = form[k];
@@ -71,6 +66,8 @@ class Settings extends Component {
             );
         
         const status = document.querySelector('#status');
+        if (!status) throw new TypeError('unable to find status');
+
         const hide = debounce(() => status.classList.add('hide'), 1000);
         const showStatus = () => {
             status.classList.remove('hide');
@@ -88,15 +85,13 @@ class Settings extends Component {
                 [passwordInput.name]: passwordInput.value
             });
 
-            console.log(`Username and password are set to ${usernameInput.value} and ${passwordInput.value}.`)
-
             status.textContent =
                 chrome.i18n.getMessage('accountStatus', [usernameInput.value, passwordInput.value]);
             showStatus();
         });
 
         const checkboxAction = {
-            autoClose: e => {
+            autoClose: (/** @type {Event & { target: HTMLInputElement }} */ e) => {
                 if (e.target.checked) {
                     chrome.storage.sync.set({ autoClose: true });
                 } else {
@@ -109,7 +104,7 @@ class Settings extends Component {
                         chrome.i18n.getMessage('off')
                     );
             },
-            showPasswordOnPopUp: e => {
+            showPasswordOnPopUp: (/** @type {Event & { target: HTMLInputElement }} */ e) => {
                 if (e.target.checked) {
                     chrome.storage.sync.set({ showPasswordOnPopUp: true });
                 } else {
@@ -121,14 +116,20 @@ class Settings extends Component {
                         chrome.i18n.getMessage('on') :
                         chrome.i18n.getMessage('off')
                     );
-            }
+            },
+            notImplemented: (/** @type {string} */ id) => console.error(`${id} is not implemented.`)
         };
         const optionSection = form.querySelector('fieldset[name=options]');
-        optionSection.addEventListener('change', (/** @type {Event & { target: HTMLElement }} */ e) => {
-            if (e.target.tagName === 'INPUT') {
+        if (!optionSection) throw new TypeError('unable to find optionSection');
+    
+        optionSection.addEventListener('change', (/** @type {Event} */ e) => {
+            if (e.target instanceof HTMLInputElement) {
                 e.preventDefault();
                 
-                checkboxAction[e.target.id](e);
+                // @ts-ignore
+                if (e.target.id in checkboxAction) checkboxAction[e.target.id](e);
+                else checkboxAction.notImplemented(e.target.id);
+                
                 showStatus();
             }
         });
@@ -141,26 +142,19 @@ class About extends Component {
 
     async init() {
         // set strings
-        const items = this.template.content.querySelectorAll('[data-message]');
+        const /** @type {NodeListOf<HTMLElement & { dataset: { message: string }}>} */ items = this.template.content.querySelectorAll('[data-message]');
         
         items.forEach(item => item.textContent = chrome.i18n.getMessage(item.dataset.message));
-    }
-
-    /**
-     * append content to dest asynchronously.
-     * @param {HTMLElement} dest destination
-     */
-     async render(dest) {
-        await super.render(dest);
-        this.instance = dest.querySelector('.container');
     }
 
 }
 
 function main() {
     const wrapper = document.querySelector('.wrapper');
+    if (!wrapper) throw new TypeError('unable to find wrapper.');
 
     const pageTitle = document.querySelector('.page-title');
+    if (!pageTitle) throw new TypeError('unable to find page-title.');
 
     const settings = new Settings('#settings-template');
     const about = new About('#about-template');
@@ -176,26 +170,29 @@ function main() {
             about.show();
             settings.hide();
         },
-        notImplemented: type => console.error(`actions.${type} is not implemented.`)
+        notImplemented: (/** @type {string} */ type) => console.error(`actions.${type} is not implemented.`)
     };
     
     Promise.all([
-        settings.render(wrapper),
-        about.render(wrapper)
+        settings.render(wrapper, 'form'),
+        about.render(wrapper, '.about')
     ])
     .then(actions.settings)
     .catch(console.error);
 
-    new Swapper('.types');
+    const swapper = new Swapper('.types');
 
-    document.body.addEventListener(Swapper.EVENT_TYPE, (/** @type {CustomEvent<string>} */ e) => {
-        e.preventDefault();
-
-        const type = e.detail;
-        if (type in actions) {
-            actions[type]();
-        } else {
-            actions.notImplemented(type);
+    swapper.onSwap((e) => {
+        if (e instanceof CustomEvent) {
+            e.preventDefault();
+    
+            const /** @type {string} */ type = e.detail;
+            if (type in actions) {
+                // @ts-ignore
+                actions[type]();
+            } else {
+                actions.notImplemented(type);
+            }
         }
     });
 }

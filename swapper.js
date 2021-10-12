@@ -1,7 +1,5 @@
 class Swapper {
 
-    // static EVENT_TYPE = 'swap';
-
     constructor(/** @type {string} */ selectorOfList) {
         const list = document.querySelector(selectorOfList);
         if (!(list instanceof HTMLUListElement)) throw new TypeError(`expect <ul>, got ${list}`);
@@ -30,6 +28,10 @@ class Swapper {
         const swapEvt = new CustomEvent(Swapper.EVENT_TYPE, { bubbles: true, detail: type });
 
         this.list.dispatchEvent(swapEvt);
+    }
+
+    onSwap(/** @type {EventListener} */ cb) {
+        document.body.addEventListener(Swapper.EVENT_TYPE, (e) => cb(e));
     }
 
 }

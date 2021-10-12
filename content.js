@@ -1,57 +1,70 @@
 'use strict';
-
+const stringifyValue = (/** @type {Record<string, unknown>} */ o) =>
+    Object.fromEntries(
+        Object.entries(o)
+        .map(([k, v]) => [k, v + ''])
+    );
 /**
  * Send login request
  * @param {string} username 
  * @param {string} password 
- * @returns {Promise<{ code: string; message: string } & Record<string, string>>} the response object
+ * @returns {Promise<{ code: string; message: string } & Record<string, unknown>>} the response object
  */
 async function sendLoginRequest(username, password) {
-    const REQUEST_URL = new URL(`/quickauth.do`, window.location.origin);
-
+    
     const pageParams = new URLSearchParams(window.location.search);
+    
     const VERSION = 0;
-    const PORTALPAGEID = 1;
+    const PORTAL_PAGE_ID = 1;
 
-    const params = {
+    const params = stringifyValue({
         userid: username,
         passwd: password,
-        wlanuserip: pageParams.get('wlanuserip'),
-        wlanacname: pageParams.get('wlanacname'),
+        wlanuserip: pageParams.get('wlanuserip') || '',
+        wlanacname: pageParams.get('wlanacname') || '',
         wlanacIp: '',
         ssid: '',
-        vlan: pageParams.get('vlan'),
-        mac: encodeURIComponent(pageParams.get('mac')),
+        vlan: pageParams.get('vlan') || '',
+        mac: encodeURIComponent(pageParams.get('mac') || ''),
         version: VERSION,
-        portalpageid: PORTALPAGEID,
+        portalpageid: PORTAL_PAGE_ID,
         timestamp: Date.now(),
         portaltype: ''
-    };
+    });
 
-    const request_params = new URLSearchParams(params);
+    const requestParams = new URLSearchParams(params);
 
-    const url = new URL(`?${request_params.toString()}`, REQUEST_URL);
+    const requestUrl = new URL(`${window.location.origin}/quickauth.do?${requestParams}`);
 
-    const res = await fetch(url, { credentials: 'same-origin' })
-    const object = await res.json();
-    return object;
+    const res = await fetch(requestUrl.toString(), { credentials: 'same-origin' });
+    return await res.json();
 };
 
 /**
- * Get notice
+ * Fetch latest notice
  * @param {'login' | 'logout'} type page type
  */
-function getNotice(type) {
+function fetchNotice(type) {
     if (type === 'login') {
-        const loginPageNotice = document.querySelector('div[class="modal-body"] > div[class="title"]');
+        const /** @type {HTMLDivElement | null} */ loginPageNotice = document.querySelector('div[class="modal-body"] > div[class="title"]');
+        if (!loginPageNotice) {
+            console.error('unable to find loginPageNotice.');
+            return;
+        }
 
         chrome.storage.sync.set({
+            // @ts-ignore
             loginPageNotice: loginPageNotice.textContent.trim().replace(/\s+/g, '\n')
         });
     } else {
-        const logoutPageNotice = document.getElementById('model_notice');
+        const /** @type {HTMLDivElement | null} */ logoutPageNotice = document.querySelector('#model_notice');
+        if (!logoutPageNotice) {
+            console.error('unable to find logoutPageNotice.');
+            return;
+        }
         
         chrome.storage.sync.set({
+            // @ts-ignore
             logoutPageNotice: logoutPageNotice.textContent.trim().replace(/\s+/g, '\n')
         });
     }
@@ -59,27 +72,28 @@ function getNotice(type) {
 
 /**
  * get values from the browser storage
- * @param {string[]} keys 
- * @returns {Promise<Record<string, unknown>>} values
  */
-const getValue = async (keys) => new Promise(resolve => chrome.storage.sync.get(keys, resolve));
+const /** @type {<T>(keys: string[]) => Promise<Record<string, T>>} */ getValue =
+    async (keys) => new Promise(resolve => chrome.storage.sync.get(keys, resolve));
+
+const closeTabIfSetAutoClose = async () => {
+    const /** @type {Record<string, boolean>} */ { autoClose } = await getValue(['autoClose']);
+    if (autoClose) {
+        chrome.runtime.sendMessage({ closeTab: true });
+    }
+};
 
 const start = async () => {
     if (window.location.href.includes('logout.html')) { // logout page, logout.html
         // close the tab after logon if user had chosen to
-        getNotice('logout');
+        fetchNotice('logout');
 
-        getValue(['autoClose'])
-            .then(({ autoClose }) => {
-                if (autoClose) {
-                    chrome.runtime.sendMessage({ closeTab: true });
-                }
-            });
+        await closeTabIfSetAutoClose();
     } else if (window.location.href.includes('portal.do')) {
         // login page, /portal.do*
-        getNotice('login');
+        fetchNotice('login');
 
-        let { username, password } = await getValue(['username', 'password']);
+        const /** @type {Record<string, string>} */ { username, password } = await getValue(['username', 'password']);
 
         if (username && password) {
             let object;
@@ -87,40 +101,38 @@ const start = async () => {
             try {
                 object = await sendLoginRequest(username, password);
             } catch (reason) {
-                alert(chrome.i18n.getMessage('errorOnRequest'), [reason]);
+                alert(chrome.i18n.getMessage('errorOnRequest', [reason]));
                 console.error(`Encountered error when sending request: ${reason}`);
+                return;
             }
             
-            if (object.code == 0) {
-                getValue(['autoClose'])
-                    .then(({ autoClose }) => {
-                        if (autoClose) {
-                            chrome.runtime.sendMessage({ closeTab: true });
-                        }
-                    });
+            if (+object.code === 0) {
+                await closeTabIfSetAutoClose();
             } else {
-                const ERROR = chrome.i18n.getMessage('errorOnLogin', object.message);
+                const error = chrome.i18n.getMessage('errorOnLogin', object.message);
                 
-                if (confirm(`${ERROR} ${chrome.i18n.getMessage('tryAgain')}`)) {
+                if (confirm(`${error} ${chrome.i18n.getMessage('tryAgain')}`)) {
                     await start();
                 }
             }
         } else {
-            const INVALID_INPUT_ALERT =
+            const invalidInputAlert =
             `${chrome.i18n.getMessage('extInvalidInputAlert')} 
             ${username} ${password}`;
-            alert(INVALID_INPUT_ALERT);
+            
+            alert(invalidInputAlert);
             chrome.runtime.openOptionsPage();
         }
     } else {
         // user manually goes to the logout page, portalLogout.do*.
         // do nothing but save the notice
-        getNotice('logout');
+        fetchNotice('logout');
     }
 }
 
 start()
     .catch((error) => {
-        alert(chrome.i18n.getMessage('errorFromExtension', [error]));
+        alert(`${chrome.i18n.getMessage('errorFromExtension', [error])}
+        ${chrome.i18n.getMessage('errorSuggestion')}`);
         console.error(`Encountered error when trying to login: ${error}`);
     });
