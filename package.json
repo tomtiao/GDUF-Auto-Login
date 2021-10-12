@@ -1,0 +1,27 @@
+{
+  "name": "gduf-auto-login-ext",
+  "version": "1.2.8",
+  "private": "true",
+  "description": "模拟登录操作自动登录校园网，很快！",
+  "main": "background.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tomtiao/GDUF-Auto-Login.git"
+  },
+  "keywords": [
+    "extension",
+    "browser"
+  ],
+  "author": "tomtiao",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/tomtiao/GDUF-Auto-Login/issues"
+  },
+  "homepage": "https://github.com/tomtiao/GDUF-Auto-Login#readme",
+  "devDependencies": {
+    "@types/chrome": "0.0.159"
+  }
+}
