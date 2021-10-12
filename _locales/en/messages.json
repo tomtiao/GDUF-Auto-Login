@@ -91,6 +91,9 @@
     "errorFromExtension": {
         "message": "From Auto-Login Extension: Error $1"
     },
+    "errorSuggestion": {
+        "message": "The error might be caused by the extension, or the campus login server is down."
+    },
     "errorOnRequest": {
         "message": "From Auto-Login Extension: Failed to send login request, error $1"
     }

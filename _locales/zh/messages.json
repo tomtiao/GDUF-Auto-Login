@@ -89,6 +89,9 @@
     "errorFromExtension": {
         "message": "来自自动登录扩展：错误 $1"
     },
+    "errorSuggestion": {
+        "message": "这可能是扩展本身的问题，也可能是校园网服务器发生了故障。"
+    },
     "errorOnRequest": {
         "message": "来自自动登录扩展：尝试发送登录请求时失败，错误 $1"
     }
