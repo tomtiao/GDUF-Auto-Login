@@ -69,7 +69,7 @@ class Settings extends Component {
         if (!status) throw new TypeError('unable to find status');
 
         const hide = debounce(() => status.classList.add('hide'), 1000);
-        const showStatus = () => {
+        const showStatusThenHide = () => {
             status.classList.remove('hide');
             hide();
         };
@@ -87,32 +87,28 @@ class Settings extends Component {
 
             status.textContent =
                 chrome.i18n.getMessage('accountStatus', [usernameInput.value, passwordInput.value]);
-            showStatus();
+            showStatusThenHide();
         });
 
         const checkboxAction = {
             autoClose: (/** @type {Event & { target: HTMLInputElement }} */ e) => {
-                if (e.target.checked) {
-                    chrome.storage.sync.set({ autoClose: true });
-                } else {
-                    chrome.storage.sync.set({ autoClose: false });
-                }
+                const checked = e.target.checked;
+                chrome.storage.sync.set({ autoClose: checked });
+
                 status.textContent =
                     chrome.i18n.getMessage('autoCloseTab',
-                        e.target.checked ?
+                        checked ?
                         chrome.i18n.getMessage('on') :
                         chrome.i18n.getMessage('off')
                     );
             },
             showPasswordOnPopUp: (/** @type {Event & { target: HTMLInputElement }} */ e) => {
-                if (e.target.checked) {
-                    chrome.storage.sync.set({ showPasswordOnPopUp: true });
-                } else {
-                    chrome.storage.sync.set({ showPasswordOnPopUp: false });
-                }
+                const checked = e.target.checked;
+                chrome.storage.sync.set({ showPasswordOnPopUp: checked });
+
                 status.textContent =
                     chrome.i18n.getMessage('showPassword',
-                        e.target.checked ?
+                        checked ?
                         chrome.i18n.getMessage('on') :
                         chrome.i18n.getMessage('off')
                     );
@@ -130,7 +126,7 @@ class Settings extends Component {
                 if (e.target.id in checkboxAction) checkboxAction[e.target.id](e);
                 else checkboxAction.notImplemented(e.target.id);
                 
-                showStatus();
+                showStatusThenHide();
             }
         });
 
@@ -142,7 +138,8 @@ class About extends Component {
 
     async init() {
         // set strings
-        const /** @type {NodeListOf<HTMLElement & { dataset: { message: string }}>} */ items = this.template.content.querySelectorAll('[data-message]');
+        const /** @type {NodeListOf<HTMLElement & { dataset: { message: string }}>} */ items =
+            this.template.content.querySelectorAll('[data-message]');
         
         items.forEach(item => item.textContent = chrome.i18n.getMessage(item.dataset.message));
     }
