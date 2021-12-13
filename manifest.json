@@ -9,12 +9,17 @@
     },
     "background": {
         "scripts": [
-            "background.js"
+            "background_scripts/background.js",
+            "background_scripts/backgroundPortalDetection.js"
         ],
         "persistent": false
     },
     "permissions": [
-        "storage"
+        "storage",
+        "alarms",
+        "http://developers.google.cn/generate_204",
+        "http://g.cn/generate_204",
+        "http://edge.microsoft.com/captiveportal/generate_204"
     ],
     "browser_action": {
         "default_popup": "popup.html"
