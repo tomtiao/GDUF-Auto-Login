@@ -41,30 +41,40 @@ chrome.alarms.onAlarm.addListener((alarm) => {
     }
 });
 
-chrome.storage.onChanged.addListener(function handleBackgroundAutoLoginChanges(changes, areaName) {
-    if ('backgroundAutoLogin' in changes) {
-        const { newValue: shouldLoginInBackground } = changes.backgroundAutoLogin;
+function setDetectionAlarm(/** @type {boolean} */ shouldLoginInBackground) {
+    chrome.storage.sync.get('username', (items) => {
+        const { username } = items;
+        
+        if (username == defaultUsername || username == '') return;
+
         if (shouldLoginInBackground) {
             chrome.alarms.get(detectionAlarmName, (alarm) => {
-                if (alarm) return; // alarm exists, no need to create alarm
+                if (alarm) chrome.alarms.clear(detectionAlarmName); // alarm exists, so clear the alarm
                 
                 chrome.alarms.create(detectionAlarmName, { when: Date.now(), periodInMinutes: 1 });
             });
         } else {
             chrome.alarms.clear(detectionAlarmName);
         }
+    });
+}
+
+chrome.storage.onChanged.addListener(function handleBackgroundAutoLoginChanges(changes) {
+    if ('backgroundAutoLogin' in changes) {
+        const { newValue: shouldLoginInBackground } = changes.backgroundAutoLogin;
+        setDetectionAlarm(shouldLoginInBackground);
     }
 });
 
-function initialBackgroundLogin() {
-    chrome.storage.sync.get('backgroundAutoLogin', (items) => {
-        if ('backgroundAutoLogin' in items) {
-            const /** @type {boolean} */ shouldLoginInBackground = items.backgroundAutoLogin;
-            if (shouldLoginInBackground) {
-                chrome.alarms.create(detectionAlarmName, { when: Date.now(), periodInMinutes: 1 });
-            }
-        } else {
-            console.error(`no backgroundAutoLogin! items: ${JSON.stringify(items)}`);
-        }
-    });
-}
+chrome.storage.sync.get('backgroundAutoLogin', (items) => {
+    if (!('backgroundAutoLogin' in items)) return; // backgroundAutoLogin is not set. should wait till next time
+
+    const /** @type {boolean} */ shouldLoginInBackground = items.backgroundAutoLogin;
+    setDetectionAlarm(shouldLoginInBackground);
+});
+
+chrome.runtime.onMessage.addListener(message => {
+    if (message.setDetectionNow) {
+        setDetectionAlarm(true);
+    }
+});
