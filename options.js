@@ -124,7 +124,7 @@ class Settings extends Component {
                 chrome.storage.sync.set({ backgroundAutoLogin: checked });
 
                 const message =
-                    chrome.i18n.getMessage('backgroundAutoLogin',
+                    chrome.i18n.getMessage('detectInBackgroundAndAutoLogin',
                         checked ?
                         chrome.i18n.getMessage('on') :
                         chrome.i18n.getMessage('off')

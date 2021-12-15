@@ -46,6 +46,9 @@
     "showPassword": {
         "message": "Show the password in the pop-up menu is $1"
     },
+    "detectInBackgroundAndAutoLogin": {
+        "message": "Detect in the background and auto login is $1"
+    },
     "on": {
         "message": "On"
     },
