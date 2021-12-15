@@ -92,6 +92,9 @@
     "tryAgain": {
         "message": "是否重试？"
     },
+    "tryAgainButton": {
+        "message": "重试"
+    },
     "errorFromExtension": {
         "message": "来自自动登录扩展：错误 $1"
     },

@@ -1,15 +1,17 @@
 const detectionAlarmName = 'shouldDetect';
 const detectionURLs = chrome.runtime.getManifest().
-    permissions?.filter(str => str.startsWith('http://')); // use http here to let captive portal redirect.
+    optional_permissions?.filter(str => str.startsWith('http://')); // use http here to let captive portal redirect.
+
+const LOGIN_ERROR = 'login-error';
 
 chrome.alarms.onAlarm.addListener((alarm) => {
     if (alarm.name == detectionAlarmName) {
         (async function() {
             const { detectPortal } = await import('../util/portal-detection.js');
-            const { getValue } = await import('../util.js');
+            const { getValue, createBasicNotification } = await import('../util.js');
             const { login } = await import('../util/login-request.js');
 
-            if (!detectionURLs) throw new Error('no available detection url.');
+            if (!detectionURLs || detectionURLs.length == 0) throw new Error('no available detection url.');
             
             const detectResult = await detectPortal(detectionURLs);
             if (detectResult.hasCaptivePortal) {
@@ -25,6 +27,14 @@ chrome.alarms.onAlarm.addListener((alarm) => {
 
                         if ( +responseObject.code !== 0 ) {
                             console.error(responseObject);
+                            await createBasicNotification(
+                                LOGIN_ERROR,
+                                responseObject.message,
+                                [ 
+                                    { title: chrome.i18n.getMessage('openSettings') },
+                                    { title: chrome.i18n.getMessage('tryAgainButton') }
+                                ]
+                            );
                         }
                     } catch (error) {
                         if (error instanceof TypeError) {
@@ -41,19 +51,44 @@ chrome.alarms.onAlarm.addListener((alarm) => {
     }
 });
 
-function setDetectionAlarm(/** @type {boolean} */ shouldLoginInBackground) {
+/**
+ * @param {string} id notification id
+ * @param {number} buttonIndex
+ */
+const onClickNotificationButton = (id, buttonIndex) => {
+    if (id == LOGIN_ERROR) {
+        if (buttonIndex == 0) { // open options button
+            chrome.runtime.openOptionsPage();
+        } else if (buttonIndex == 1) { // retry button
+            initialDetection();
+        }
+    }
+}
+
+function addNotificationListener() {
+    chrome.notifications.onButtonClicked.addListener(onClickNotificationButton);
+}
+
+function removeNotificationListener() {
+    chrome.notifications.onButtonClicked.addListener(onClickNotificationButton);
+}
+
+function setDetection(/** @type {boolean} */ shouldLoginInBackground) {
     chrome.storage.sync.get('username', (items) => {
         const { username } = items;
         
         if (username == defaultUsername || username == '') return;
-
+        
         if (shouldLoginInBackground) {
+            addNotificationListener();
+
             chrome.alarms.get(detectionAlarmName, (alarm) => {
                 if (alarm) chrome.alarms.clear(detectionAlarmName); // alarm exists, so clear the alarm
                 
                 chrome.alarms.create(detectionAlarmName, { when: Date.now(), periodInMinutes: 1 });
             });
         } else {
+            removeNotificationListener();
             chrome.alarms.clear(detectionAlarmName);
         }
     });
@@ -62,7 +97,7 @@ function setDetectionAlarm(/** @type {boolean} */ shouldLoginInBackground) {
 chrome.storage.onChanged.addListener(function handleBackgroundAutoLoginChanges(changes) {
     if ('backgroundAutoLogin' in changes) {
         const { newValue: shouldLoginInBackground } = changes.backgroundAutoLogin;
-        setDetectionAlarm(shouldLoginInBackground);
+        setDetection(shouldLoginInBackground);
     }
 });
 
@@ -71,7 +106,7 @@ const initialDetection = () => {
         if (!('backgroundAutoLogin' in items)) return; // backgroundAutoLogin is not set. should wait till next time
     
         const /** @type {boolean} */ shouldLoginInBackground = items.backgroundAutoLogin;
-        setDetectionAlarm(shouldLoginInBackground);
+        setDetection(shouldLoginInBackground);
     });
 };
 
@@ -82,3 +117,11 @@ chrome.runtime.onMessage.addListener(message => {
         initialDetection();
     }
 });
+
+Object.defineProperty(
+    window,
+    'detectionURLs', 
+    {
+        value: detectionURLs
+    }
+);

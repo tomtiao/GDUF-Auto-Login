@@ -121,16 +121,46 @@ class Settings extends Component {
             },
             backgroundAutoLogin: (/** @type {Event & { target: HTMLInputElement }} */ e) => {
                 const checked = e.target.checked;
-                chrome.storage.sync.set({ backgroundAutoLogin: checked });
-
-                const message =
-                    chrome.i18n.getMessage('detectInBackgroundAndAutoLogin',
-                        checked ?
-                        chrome.i18n.getMessage('on') :
-                        chrome.i18n.getMessage('off')
-                    );
+                
+                chrome.runtime.getBackgroundPage(page => {
+                    if (!page) throw new Error('no background page!');
     
-                showStatusThenHide(message);
+                    const requestPermissions = {
+                        permissions: ['background', 'notifications'],
+                        // @ts-ignore
+                        origins: page.detectionURLs
+                    };
+
+                    chrome.permissions.contains(requestPermissions, permission => {
+                        if (permission) {
+                            if (checked) return; // already has permission
+                            
+                            chrome.storage.sync.set({ backgroundAutoLogin: checked });
+
+                            chrome.permissions.remove(requestPermissions);
+                            return;
+                        }
+                        if (!checked) return;
+
+                        chrome.permissions.request(requestPermissions, granted => {
+                            if (granted) {
+                                chrome.storage.sync.set({ backgroundAutoLogin: checked });
+
+                                const message =
+                                    chrome.i18n.getMessage('detectInBackgroundAndAutoLogin',
+                                        checked ?
+                                        chrome.i18n.getMessage('on') :
+                                        chrome.i18n.getMessage('off')
+                                    );
+                    
+                                showStatusThenHide(message);
+                            } else { // user refuses to give permission, reset the checkbox
+                                e.target.checked = false;
+                            }
+                        });
+                    });
+                });
+                
             },
             notImplemented: (/** @type {string} */ id) => console.error(`${id} is not implemented.`)
         };

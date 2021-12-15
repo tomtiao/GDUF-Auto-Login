@@ -94,6 +94,9 @@
     "tryAgain": {
         "message": "Try again?"
     },
+    "tryAgainButton": {
+        "message": "Try again"
+    },
     "errorFromExtension": {
         "message": "From Auto-Login Extension: Error $1"
     },
