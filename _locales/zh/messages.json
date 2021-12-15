@@ -59,6 +59,9 @@
     "accountTitle": {
         "message": "账号"
     },
+    "backgroundAutoLogin": {
+        "message": "后台检测并自动登录"
+    },
     "optionsTitle": {
         "message": "杂项"
     },

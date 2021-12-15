@@ -1,26 +1,39 @@
 /**
+ * create a promise that resolves after given ms
+ * @param {number} timeout 
+ * @return {Promise<ReturnType<typeof setTimeout>>}
+ */
+function createTimeoutPromise(timeout) {
+    return new Promise((resolve) => setTimeout(resolve, timeout));
+}
+
+/**
  * Return the login page url of a captive portal.
+ * @param {string[]} detectionURLs an array of urls that will send a request to
+ * @param {number} detectionSuccessStatusCode the status code in the detection response, default 204
+ * @param {number} detectTimeout ms before one request to detection url timeout, default 5000ms
  * @return {Promise<{ hasCaptivePortal: true; url: string } | { hasCaptivePortal: false }>}
  */
-async function detect() {
-    const PREFIX = 'http://';
-    const DETECTION_STATUS_CODE = 204;
+async function detect(detectionURLs, detectionSuccessStatusCode = 204, detectTimeout = 5000) {
+    const DETECTION_STATUS_CODE = detectionSuccessStatusCode;
     const TARGET_SERVER_NAME = 'MAGI 1.0';
-    const captivePortalDetectionURLs =
-        chrome.runtime.getManifest().permissions
-            ?.filter(str => str.startsWith(PREFIX)); // use http here to let captive portal redirect.
+    detectionURLs.forEach((url => console.debug(`Available url: ${url}`)));
+    let success = false;
+    let loginURL;
+    try {
+        for (const url of detectionURLs) {
+            let resp;
 
-    if (captivePortalDetectionURLs && captivePortalDetectionURLs.length > 0) {
-        captivePortalDetectionURLs.forEach((url => console.debug(`Available url: ${url}`)));
-        let success = false;
-        let loginURL;
-        try {
-            for (const url of captivePortalDetectionURLs) {
-                const resp = await fetch(url, {
+            {
+                const timeout = createTimeoutPromise(detectTimeout);
+                const detection = fetch(url, {
                     mode: 'no-cors',
                     redirect: 'follow',
-                    keepalive: true,
                 });
+                resp = await Promise.race([detection, timeout]);
+            }
+
+            if (resp instanceof Response) {
                 if (resp.status == DETECTION_STATUS_CODE) {
                     console.log('logon');
                     break;
@@ -48,7 +61,7 @@ async function detect() {
                         } catch (error) {
                             console.error(error);
                         }
-                    } else { // no target server, so not in desired portal captive
+                    } else { // no target server, so we are not in the expected portal captive
                         success = true;
                         break;
                     }
@@ -56,22 +69,21 @@ async function detect() {
                 if (success) {
                     break;
                 }
+            } else {
+                console.log(`request to ${url} timeout.`);
             }
-
-        } catch (error) {
-            console.error(`${error}`);
-        } finally {
-            return (
-                loginURL ?
-                { hasCaptivePortal: true, url: loginURL } :
-                { hasCaptivePortal: false }
-            );
         }
-    } else {
-        throw new Error('no available url.')
+    } catch (error) {
+        console.error(`${error}`);
+    } finally {
+        return (
+            loginURL ?
+            { hasCaptivePortal: true, url: loginURL } :
+            { hasCaptivePortal: false }
+        );
     }
 }
 
 export {
-    detect as portalDetection
+    detect as detectPortal
 }

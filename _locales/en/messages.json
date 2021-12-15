@@ -67,6 +67,9 @@
     "autoCloseMessage": {
         "message": "Automatically close the tab after login"
     },
+    "backgroundAutoLogin": {
+        "message": "Detect in the background and auto login"
+    },
     "showPasswordOnPopUp": {
         "message": "Show the password in the pop-up menu"
     },

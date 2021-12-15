@@ -4,25 +4,62 @@ let defaultUsername = '123456789',
     defaultPassword = '123456',
     autoClose = true,
     showPasswordOnPopUp = false,
+    backgroundAutoLogin = true,
     loginPageNotice = '',
-    logoutPageNotice = '';
+    logoutPageNotice = '',
+    lastLoginStatus = '';
 
 const handleInstall = (/** @type {chrome.runtime.InstalledDetails} */ request) => {
-    if (request.reason == 'install') {
-        chrome.storage.sync.set({
+    if (request.reason == 'install'
+        || request.reason == 'update') { // make sure new options are available after update
+        chrome.storage.sync.get({
             username: defaultUsername,
             password: defaultPassword,
             autoClose,
             showPasswordOnPopUp,
-            loginPageNotice
+            loginPageNotice,
+            logoutPageNotice,
+            backgroundAutoLogin,
+            lastLoginStatus
+        }, (items) => {
+            const {
+                username,
+                password,
+                autoClose,
+                showPasswordOnPopUp,
+                loginPageNotice,
+                logoutPageNotice,
+                backgroundAutoLogin,
+                lastLoginStatus
+            } = items;
+
+            chrome.storage.sync.set({
+                username,
+                password,
+                autoClose,
+                showPasswordOnPopUp,
+                loginPageNotice,
+                logoutPageNotice,
+                backgroundAutoLogin,
+                lastLoginStatus
+            }, () => {
+                if (request.reason == 'install') {
+                    console.debug(`Username and password set to ${defaultUsername} and ${defaultPassword}`);
+                    console.debug(`Automatically close the tab after login is set to ${autoClose}`);
+                    console.debug(`Show password in the pop-up menu is set to ${showPasswordOnPopUp}`);
+                    console.debug(`Auto background login is set to ${backgroundAutoLogin}`);
+                    chrome.runtime.openOptionsPage(
+                        () => console.debug(`First time launch, opening options.`)
+                    );
+                }
+                
+                chrome.tabs.create({
+                    url: 'whats-new.html'
+                });
+
+                initialBackgroundLogin();
+            });
         });
-        console.debug(`Default username and password set to ${defaultUsername} and ${defaultPassword}`);
-        console.debug(`Automatically close the tab after login is set to ${autoClose}`);
-        console.debug(`Show password in the pop-up menu is set to ${showPasswordOnPopUp}`);
-        chrome.storage.sync.set({ loginPageNotice, logoutPageNotice });
-        chrome.runtime.openOptionsPage(
-            () => console.debug(`First time launch, opening options.`)
-        );
     }
 };
 
