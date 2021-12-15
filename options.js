@@ -69,7 +69,8 @@ class Settings extends Component {
         if (!status) throw new TypeError('unable to find status');
 
         const hide = debounce(() => status.classList.add('hide'), 1000);
-        const showStatusThenHide = () => {
+        const showStatusThenHide = (/** @type {string} */ message) => {
+            status.textContent = message;
             status.classList.remove('hide');
             hide();
         };
@@ -85,9 +86,10 @@ class Settings extends Component {
                 [passwordInput.name]: passwordInput.value
             });
 
-            status.textContent =
-                chrome.i18n.getMessage('accountStatus', [usernameInput.value, passwordInput.value]);
-            showStatusThenHide();
+            // trigger background detection alarm set up
+            chrome.runtime.sendMessage({ setDetectionNow: true });
+
+            showStatusThenHide(chrome.i18n.getMessage('accountStatus', [usernameInput.value, passwordInput.value]));
         });
 
         const checkboxAction = {
@@ -95,34 +97,40 @@ class Settings extends Component {
                 const checked = e.target.checked;
                 chrome.storage.sync.set({ autoClose: checked });
 
-                status.textContent =
+                const message =
                     chrome.i18n.getMessage('autoCloseTab',
                         checked ?
                         chrome.i18n.getMessage('on') :
                         chrome.i18n.getMessage('off')
                     );
+                
+                showStatusThenHide(message);
             },
             showPasswordOnPopUp: (/** @type {Event & { target: HTMLInputElement }} */ e) => {
                 const checked = e.target.checked;
                 chrome.storage.sync.set({ showPasswordOnPopUp: checked });
 
-                status.textContent =
+                const message =
                     chrome.i18n.getMessage('showPassword',
                         checked ?
                         chrome.i18n.getMessage('on') :
                         chrome.i18n.getMessage('off')
                     );
+                
+                showStatusThenHide(message);
             },
             backgroundAutoLogin: (/** @type {Event & { target: HTMLInputElement }} */ e) => {
                 const checked = e.target.checked;
                 chrome.storage.sync.set({ backgroundAutoLogin: checked });
 
-                status.textContent =
+                const message =
                     chrome.i18n.getMessage('backgroundAutoLogin',
                         checked ?
                         chrome.i18n.getMessage('on') :
                         chrome.i18n.getMessage('off')
                     );
+    
+                showStatusThenHide(message);
             },
             notImplemented: (/** @type {string} */ id) => console.error(`${id} is not implemented.`)
         };
@@ -136,8 +144,6 @@ class Settings extends Component {
                 // @ts-ignore
                 if (e.target.id in checkboxAction) checkboxAction[e.target.id](e);
                 else checkboxAction.notImplemented(e.target.id);
-                
-                showStatusThenHide();
             }
         });
 
