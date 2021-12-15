@@ -16,11 +16,11 @@
     },
     "permissions": [
         "alarms",
-        "storage"
+        "storage",
+        "notifications"
     ],
     "optional_permissions": [
         "background",
-        "notifications",
         "http://developers.google.cn/generate_204",
         "http://g.cn/generate_204",
         "http://edge.microsoft.com/captiveportal/generate_204"

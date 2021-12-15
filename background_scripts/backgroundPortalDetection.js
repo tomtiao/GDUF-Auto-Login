@@ -51,11 +51,7 @@ chrome.alarms.onAlarm.addListener((alarm) => {
     }
 });
 
-/**
- * @param {string} id notification id
- * @param {number} buttonIndex
- */
-const onClickNotificationButton = (id, buttonIndex) => {
+chrome.notifications.onButtonClicked.addListener((id, buttonIndex) => {
     if (id == LOGIN_ERROR) {
         if (buttonIndex == 0) { // open options button
             chrome.runtime.openOptionsPage();
@@ -63,15 +59,7 @@ const onClickNotificationButton = (id, buttonIndex) => {
             initialDetection();
         }
     }
-}
-
-function addNotificationListener() {
-    chrome.notifications.onButtonClicked.addListener(onClickNotificationButton);
-}
-
-function removeNotificationListener() {
-    chrome.notifications.onButtonClicked.addListener(onClickNotificationButton);
-}
+});
 
 function setDetection(/** @type {boolean} */ shouldLoginInBackground) {
     chrome.storage.sync.get('username', (items) => {
@@ -80,15 +68,12 @@ function setDetection(/** @type {boolean} */ shouldLoginInBackground) {
         if (username == defaultUsername || username == '') return;
         
         if (shouldLoginInBackground) {
-            addNotificationListener();
-
             chrome.alarms.get(detectionAlarmName, (alarm) => {
                 if (alarm) chrome.alarms.clear(detectionAlarmName); // alarm exists, so clear the alarm
                 
                 chrome.alarms.create(detectionAlarmName, { when: Date.now(), periodInMinutes: 1 });
             });
         } else {
-            removeNotificationListener();
             chrome.alarms.clear(detectionAlarmName);
         }
     });
