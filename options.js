@@ -126,7 +126,7 @@ class Settings extends Component {
                     if (!page) throw new Error('no background page!');
     
                     const requestPermissions = {
-                        permissions: ['background', 'notifications'],
+                        permissions: ['background'],
                         // @ts-ignore
                         origins: page.detectionURLs
                     };
