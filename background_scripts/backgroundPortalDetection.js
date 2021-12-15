@@ -66,15 +66,19 @@ chrome.storage.onChanged.addListener(function handleBackgroundAutoLoginChanges(c
     }
 });
 
-chrome.storage.sync.get('backgroundAutoLogin', (items) => {
-    if (!('backgroundAutoLogin' in items)) return; // backgroundAutoLogin is not set. should wait till next time
+const initialDetection = () => {
+    chrome.storage.sync.get('backgroundAutoLogin', (items) => {
+        if (!('backgroundAutoLogin' in items)) return; // backgroundAutoLogin is not set. should wait till next time
+    
+        const /** @type {boolean} */ shouldLoginInBackground = items.backgroundAutoLogin;
+        setDetectionAlarm(shouldLoginInBackground);
+    });
+};
 
-    const /** @type {boolean} */ shouldLoginInBackground = items.backgroundAutoLogin;
-    setDetectionAlarm(shouldLoginInBackground);
-});
+initialDetection();
 
 chrome.runtime.onMessage.addListener(message => {
     if (message.setDetectionNow) {
-        setDetectionAlarm(true);
+        initialDetection();
     }
 });

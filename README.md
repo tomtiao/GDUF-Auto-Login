@@ -20,13 +20,13 @@
 
   - [自动登陆GDUF校园网 - Microsoft Edge Addons](https://microsoftedge.microsoft.com/addons/detail/keaemmllkpjogndglcndjdihlbeaeede)
 
-- Mozilla Firefox 及其他基于 Chromium 的浏览器
-
-  - [Releases · tomtiao/GDUF-Auto-Login](https://github.com/tomtiao/GDUF-Auto-Login/releases)
-
 - Google Chrome
 
   - 上架商店需要一定的费用，如果你希望扩展上架，请在这个 [Issue](https://github.com/tomtiao/GDUF-Auto-Login/issues/1) 下回复。
+
+- Mozilla Firefox 及其他基于 Chromium 的浏览器
+
+  - [Releases · tomtiao/GDUF-Auto-Login](https://github.com/tomtiao/GDUF-Auto-Login/releases)
 
 ## 使用说明
 
@@ -43,6 +43,12 @@
     - 若启用，下次打开浏览器后，会后台检测网络环境并自动登录
 
     - 若禁用，下次打开校园网登录页面时，仍会自动登录并关闭页面
+
+5. （可选）打开浏览器的“继续运行后台扩展和应用”，扩展也能在关闭浏览器窗口后继续运行
+
+    - Microsoft Edge
+    
+      - 在设置-系统和性能-在 Microsoft Edge 关闭后继续运行后台扩展和应用
 
 ## 报告问题
 

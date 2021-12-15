@@ -4,7 +4,7 @@ let defaultUsername = '123456789',
     defaultPassword = '123456',
     autoClose = true,
     showPasswordOnPopUp = false,
-    backgroundAutoLogin = true,
+    backgroundAutoLogin = false,
     loginPageNotice = '',
     logoutPageNotice = '';
 
