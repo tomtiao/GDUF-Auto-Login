@@ -45,7 +45,7 @@
         "message": "在弹出菜单中显示密码已$1"
     },
     "detectInBackgroundAndAutoLogin": {
-        "message": "后台检测并自动登录已 $1"
+        "message": "后台检测并自动登录已$1"
     },
     "on": {
         "message": "开启"
