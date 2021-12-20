@@ -38,6 +38,17 @@ async function detect(detectionURLs, detectionSuccessStatusCode = 204, detectTim
                     console.log('logon');
                     break;
                 } else {
+                    /**
+                     * browser switches from http to https,
+                     * so the response of http is filtered for some reasons (security?)
+                     * its status is set to 0
+                     * see https://fetch.spec.whatwg.org/#concept-filtered-response-opaque
+                     * it also means we are likely outside a portal captive
+                     */
+                    if (resp.status === 0) {
+                        success = true;
+                        break;
+                    }
                     console.log(`it seems that we need login now. url: ${url}, statusCode: ${resp.status}`);
                     if (resp.headers.get('Server') == TARGET_SERVER_NAME) {
                         try {
